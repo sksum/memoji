@@ -7,8 +7,27 @@
             console.log(svg);
         </script>
     </head>
+    
     <body>
-        <video id="now"></video>
+    <style>
+        canvas {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+ 
+       transform: translate3d(-50%, -50%, 0);
+    }
+    </style>
+        <canvas id="output"></canvas>
+        <video id="now" playsinline style="
+          -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+          visibility: hidden;
+          width: auto;
+          height: auto;
+          ">
+        </video>
     </body>
+    <script src="triangulation.js" defer></script>
     <script src="file.js" defer></script>
 </html>
