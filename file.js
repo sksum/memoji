@@ -38,8 +38,8 @@ async function renderPrediction() {
   canvas.width = 1280
   canvas.height = 720
   var ctx = canvas.getContext('2d');
-  ctx.drawImage(
-      video, 0, 0, 1028, 720, 0, 0, canvas.width, canvas.height);
+  // ctx.drawImage(
+  //     video, 0, 0, 1028, 720, 0, 0, canvas.width, canvas.height);
 
   if (predictions.length > 0) {
     console.log("still here")
@@ -97,6 +97,9 @@ async function renderPrediction() {
           ctx.beginPath();
           ctx.ellipse(rightCenter[0], rightCenter[1], rightDiameterX / 2, rightDiameterY / 2, 0, 0, 2 * Math.PI);
           ctx.stroke();
+          let xOffset = rightCenter[0] - (keypoints[133][0] + keypoints[130][0])/2;
+          console.log("left: ",xOffset,leftCenter[1],"right: ",rightCenter[0]-keypoints[0][0],rightCenter[1])
+          console.log(document.getElementById("helloworld").setAttribute('transform',"translate("+(-xOffset)*1.5+",0)"));
         }
       }
     });
