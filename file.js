@@ -45,16 +45,13 @@ async function setup  () {
           const keypoints = predictions[i].scaledMesh;
     
           // Log facial keypoints.
-          for (let i = 0; i < keypoints.length; i++) {
-            const [x, y, z] = keypoints[i];
-    
-            console.log(`Keypoint ${i}: [${x}, ${y}, ${z}]`);
-          }
+
+          console.log(keypoints.length, keypoints[0][0]);
         }
       }
 }
 // Prefer camera resolution nearest to 1280x720.
-var constraints = { audio: true, video: { width: 1280, height: 720 } }; 
+var constraints = {video: { width: 1280, height: 720 } }; 
 
 async function setupCamera () {
     navigator.mediaDevices.getUserMedia(constraints)
