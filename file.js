@@ -97,9 +97,10 @@ async function renderPrediction() {
           ctx.beginPath();
           ctx.ellipse(rightCenter[0], rightCenter[1], rightDiameterX / 2, rightDiameterY / 2, 0, 0, 2 * Math.PI);
           ctx.stroke();
+          let yOffset = rightCenter[1] - (keypoints[27][1] + keypoints[23][1])/2;
           let xOffset = rightCenter[0] - (keypoints[133][0] + keypoints[130][0])/2;
           console.log("left: ",xOffset,leftCenter[1],"right: ",rightCenter[0]-keypoints[0][0],rightCenter[1])
-          console.log(document.getElementById("helloworld").setAttribute('transform',"translate("+(-xOffset)*1.5+",0)"));
+          document.getElementById("helloworld").setAttribute('transform',"translate("+(-xOffset)*1.5+","+(yOffset)*2+")")
         }
       }
     });
