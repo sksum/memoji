@@ -5,12 +5,28 @@ const GREEN = '#32EEDB';
 const RED = "#FF2C35";
 const BLUE = "#157AB3";
 const BLACK = "#000000";
+const REB_In = [107,55];
+const REB_Middle = [105,52];
+const REB_Out = [156,124];
+const LEB_In = [336,285];
+const LEB_Middle = [334,282];
+const LEB_Out = [383,353];
+const avgScale = 3;
 
+
+let stackYOffset = [];
+let stackXOffset = [];
 
 function distance(a, b) {
   return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2));
 }
 
+function average(queue) {
+  let avg = 0 ;
+  for (let i of queue) avg += i;
+  avg = avg / queue.length;
+  return avg;
+}
 
 function drawPath(ctx, points, closePath) {
   const region = new Path2D();
@@ -97,10 +113,33 @@ async function renderPrediction() {
           ctx.beginPath();
           ctx.ellipse(rightCenter[0], rightCenter[1], rightDiameterX / 2, rightDiameterY / 2, 0, 0, 2 * Math.PI);
           ctx.stroke();
+
+
+          //getDistance from cam:
+          let noseSize = distance(keypoints[6],keypoints[4])
+          console.log("distane from camera ",noseSize);
+
+          //iris handling
           let yOffset = rightCenter[1] - (keypoints[27][1] + keypoints[23][1])/2;
           let xOffset = rightCenter[0] - (keypoints[133][0] + keypoints[130][0])/2;
-          console.log("left: ",xOffset,leftCenter[1],"right: ",rightCenter[0]-keypoints[0][0],rightCenter[1])
-          document.getElementById("helloworld").setAttribute('transform',"translate("+(-xOffset)*1.5+","+(yOffset)*2+")")
+          
+          //stabilize
+          stackXOffset.push(xOffset);
+          if (stackXOffset.length >= avgScale) stackXOffset.shift();
+
+          stackYOffset.push(yOffset);
+          if (stackYOffset.length >= avgScale) stackYOffset.shift();
+          xOffset = average(stackXOffset);
+          yOffset = average(stackYOffset);
+
+          document.getElementById("eyeGroup").setAttribute('transform',"translate("+(-xOffset)*1.5+","+(yOffset)*2+")")
+          const c = 1;
+          // eyebrows handling
+          let yDistR = (keypoints[REB_Middle[0]][1] + keypoints[REB_Middle[1]][1]) /2  -  rightCenter[1];
+          document.getElementById("righteyebrow").setAttribute('transform',"translate("+0+","+((yDistR/2 +16))+")")
+          
+          let yDistL = (keypoints[LEB_Middle[0]][1] + keypoints[LEB_Middle[1]][1]) /2  -  leftCenter[1];
+          document.getElementById("lefteyebrow").setAttribute('transform',"translate("+0+","+((yDistL/2 + 16))+")")
         }
       }
     });
